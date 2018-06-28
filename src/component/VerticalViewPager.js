@@ -25,9 +25,6 @@ class VerticalViewPager extends Component {
         this._enableScrollTimer = null;
         this._layout = null;
         this._contentOffset = null;
-        this.state = {
-            scrollEnabled: true
-        };
     }
 
     scrollTo({x, y, animated}) {
@@ -65,6 +62,8 @@ class VerticalViewPager extends Component {
         this.setState({
             scrollEnabled: false
         });
+        const page = Math.round(nextYOffset / height)
+        this.handlePageChange(page)
     }
 
     prevPage() {
@@ -77,12 +76,21 @@ class VerticalViewPager extends Component {
         this.setState({
             scrollEnabled: false
         });
+        const page = Math.round(nextYOffset / height)
+        this.handlePageChange(page)
+    }
+
+    handlePageChange(page) {
+        if (this.props.onPageChanged != null) {
+            this.props.onPageChanged(page);
+        }
     }
 
     onScroll(e) {
         if (!this._scrolling) {
             this._startEnableScrollTimer();
         }
+        _.invoke(this.props, 'onScroll', e);
     }
 
     _setStartOffset(startOffset) {
@@ -118,10 +126,10 @@ class VerticalViewPager extends Component {
     }
 
     onMomentumScrollEnd(e) {
-      // Because onMomentumScrollEnd event is already be replace by onScroll event
-      // that will event onMomentumScrollEnd if necassary.
-      // Here define this event callback only avoid user to listen onMomentumScrollEnd
-      // of native ScrollView that may cause troubles.
+        // Because onMomentumScrollEnd event is already be replace by onScroll event
+        // that will event onMomentumScrollEnd if necassary.
+        // Here define this event callback only avoid user to listen onMomentumScrollEnd
+        // of native ScrollView that may cause troubles.
     }
 
     _startEnableScrollTimer() {
@@ -148,7 +156,7 @@ class VerticalViewPager extends Component {
             // contentOffset is iOS only attribute in ScrollView. Use scrollTo to mimic this bahavior in Android.
             // XXX If update swiper children and also change contentOffset, scrollTo will not work. Don't know why...
             setTimeout(function() {
-              this.scrollTo({...nextContentOffset, animated: true});
+                this.scrollTo({...nextContentOffset, animated: true});
             }.bind(this), 25)
         }
     }
@@ -165,9 +173,10 @@ class VerticalViewPager extends Component {
                 onLayout={e => this._onLayout(e)}
                 horizontal={false}
                 style={style}
-                scrollEnabled={this.state.scrollEnabled}
+                scrollEnabled={this.props.scrollEnabled}
                 onScrollBeginDrag={e => this.onScrollBeginDrag(e)}
                 onScrollEndDrag={e => this.onScrollEndDrag(e)}
+                onPageChanged={page => this.onPageChanged(page)}
                 onMomentumScrollEnd={e => this.onMomentumScrollEnd(e)}
                 onScroll={e => this.onScroll(e)}
                 scrollEventThrottle={50}

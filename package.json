@@ -1,10 +1,10 @@
 {
-  "name": "react-native-vertical-view-pager",
-  "version": "0.1.1",
-  "homepage": "https://github.com/gy-chen/react_native_vertical_view_pager",
+  "name": "@muhammadsr/react-native-vertical-view-pager",
+  "version": "0.1.2",
+  "homepage": "https://github.com/muhammadsr/react_native_vertical_view_pager.git",
   "repository": {
     "type": "git",
-    "url": "https://github.com/gy-chen/react_native_vertical_view_pager"
+    "url": "https://github.com/muhammadsr/react_native_vertical_view_pager.git"
   },
   "devDependencies": {
     "prop-types": "^15.6.0",
